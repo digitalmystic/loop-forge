@@ -1,0 +1,42 @@
+# Loop Forge Pattern: continuous-enhance
+
+Probe external sources → cross-reference knowledge bases → find patterns → update artifacts → deploy.  
+Designed for intelligence operations that self-improve on a schedule.
+
+## Loop Flow
+
+```
+CRON TICK
+  │
+  ├─ 1. PROBE (fleet reachability, source availability)
+  ├─ 2. SCRAPE (web search, API polls, RSS feeds)
+  ├─ 3. CROSS-REFERENCE (knowledge bases: GBrain, wiki, brain, sessions)
+  ├─ 4. PATTERN MATCH (detection rules → score → flag)
+  ├─ 5. UPDATE (patch artifacts, append data files)
+  ├─ 6. GIT (commit + push)
+  └─ 7. DEPLOY (publish to live URL)
+```
+
+## Council Model
+
+**Host** (DeepSeek/Codex/Grok): Does the scrape, cross-reference, and update work.  
+**Council** (Claude/Gemini/different model): Reviews plan before execution, reviews deliverable before deploy.
+
+## Stop Guards
+
+- Max iterations per tick: 3 (plan → deliver → verify)
+- No-progress detection: 2 iterations without new findings → stop
+- Budget: $2 USD / 500K tokens per tick
+- Revision limit: 2 revisions per gate
+
+## Verification
+
+1. **Programmatic**: `scripts/verify-diff.sh` — checks that only intended files changed
+2. **Judge**: Council model checks that all findings are sourced, no hallucinated data
+3. **Human** (optional): Flagged for any HIGH-significance finding (>3 on significance scale)
+
+## State
+
+- `state.json`: Last tick timestamp, findings count, sources probed
+- `run-log.md`: Per-tick summary, what changed, council verdict
+- Git commit log: Immutable audit trail

@@ -1,0 +1,157 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/chipoto69/loop-forge/schema/loop.v1.json",
+  "title": "Loop Forge authoring spec v1",
+  "description": "Fused from ksimback/looper + cobusgreyling/loop-engineering. Tool-agnostic loop spec for Hermes, Claude Code, and Codex agents.",
+  "type": "object",
+  "required": ["version", "meta", "goal", "host", "gates", "loop_control", "workspace"],
+  "properties": {
+    "version": { "const": 1 },
+    "meta": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "description": { "type": "string" },
+        "author": { "type": "string" },
+        "created": { "type": "string", "format": "date" },
+        "pattern": { "type": "string", "enum": ["daily-triage", "continuous-enhance", "minimal-fix", "verifier", "issue-triage", "research-synthesis", "custom"] }
+      }
+    },
+    "goal": {
+      "type": "object",
+      "required": ["statement", "definition_of_done", "verification"],
+      "properties": {
+        "statement": { "type": "string", "minLength": 1 },
+        "definition_of_done": { "type": "string", "minLength": 1 },
+        "context_sources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "anyOf": [
+              { "required": ["file"] },
+              { "required": ["cmd"] },
+              { "required": ["kb"] }
+            ]
+          }
+        },
+        "verification": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "type"],
+            "properties": {
+              "id": { "type": "string" },
+              "type": { "enum": ["programmatic", "judge", "human"] },
+              "check": { "type": "array", "items": { "type": "string" } },
+              "expect": { "enum": ["exit_zero", "exit_nonzero", "contains", "regex"] },
+              "rubric": { "type": "string" },
+              "prompt": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "host": {
+      "type": "object",
+      "required": ["agent", "model"],
+      "properties": {
+        "agent": { "enum": ["hermes", "claude-code", "codex", "grok", "cursor"] },
+        "model": { "type": "string" },
+        "provider": { "type": "string" },
+        "invoke": { "type": "array", "items": { "type": "string" } },
+        "timeout_sec": { "type": "integer", "default": 600 },
+        "toolsets": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "council": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "role"],
+        "properties": {
+          "id": { "type": "string" },
+          "role": { "enum": ["reviewer", "judge"] },
+          "agent": { "enum": ["hermes", "claude-code", "codex", "grok"] },
+          "model": { "type": "string" },
+          "provider": { "type": "string" },
+          "scope": {
+            "type": "array",
+            "items": { "enum": ["plan", "delivery"] }
+          }
+        }
+      }
+    },
+    "gates": {
+      "type": "object",
+      "required": ["plan_gate", "delivery_gate"],
+      "properties": {
+        "plan_gate": {
+          "type": "object",
+          "required": ["members", "criteria", "max_revisions"],
+          "properties": {
+            "when": { "const": "after_plan" },
+            "members": { "type": "array", "items": { "type": "string" } },
+            "verdict_policy": { "enum": ["revise_until_clean", "single_pass", "human_override"] },
+            "verdict_source": { "type": "string" },
+            "criteria": { "type": "array", "items": { "type": "string" } },
+            "max_revisions": { "type": "integer", "minimum": 1, "maximum": 10 }
+          }
+        },
+        "delivery_gate": {
+          "type": "object",
+          "required": ["members", "criteria", "max_revisions"],
+          "properties": {
+            "when": { "const": "after_each_delivery" },
+            "members": { "type": "array", "items": { "type": "string" } },
+            "verdict_policy": { "enum": ["revise_until_clean", "single_pass", "human_override"] },
+            "verdict_source": { "type": "string" },
+            "criteria": { "type": "array", "items": { "type": "string" } },
+            "max_revisions": { "type": "integer", "minimum": 1, "maximum": 10 }
+          }
+        }
+      }
+    },
+    "loop_control": {
+      "type": "object",
+      "required": ["max_iterations"],
+      "properties": {
+        "max_iterations": { "type": "integer", "minimum": 1 },
+        "budget": {
+          "type": "object",
+          "properties": {
+            "usd": { "type": "number" },
+            "tokens": { "type": "integer" },
+            "wall_clock_min": { "type": "integer" }
+          }
+        },
+        "no_progress": {
+          "type": "object",
+          "properties": {
+            "max_stalled_iterations": { "type": "integer" },
+            "signals": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "stop_conditions": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "workspace": {
+      "type": "object",
+      "required": ["dir"],
+      "properties": {
+        "dir": { "type": "string" },
+        "isolation": { "enum": ["current_workspace", "git_worktree", "container"] },
+        "layout": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "observability": {
+      "type": "object",
+      "properties": {
+        "state_file": { "type": "string", "default": "state.json" },
+        "run_log": { "type": "string", "default": "run-log.md" },
+        "checkpoint_granularity": { "enum": ["gate", "iteration", "step"] },
+        "audit_score_badge": { "type": "boolean" }
+      }
+    }
+  }
+}

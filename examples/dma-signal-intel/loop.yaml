@@ -1,0 +1,122 @@
+version: 1
+meta:
+  name: dma-signal-intel
+  description: Continuous enhancement of EU DMA Signal Intelligence dashboard. Probes EC sources, cross-references knowledge bases, finds patterns, updates dashboard, deploys.
+  author: Legolas (SWC Devices Network)
+  created: 2026-06-30
+  pattern: continuous-enhance
+  repo: chipoto69/dma-signal-intel
+
+goal:
+  statement: >
+    Enhance the DMA Signal Intelligence operation by probing EC DMA sources,
+    scraping for new notifications and gatekeeper actions, cross-referencing
+    against GBrain, wiki, brain, and session knowledge bases, finding new
+    patterns, updating the dashboard, and deploying to here.now.
+  definition_of_done: >
+    Dashboard updated with any new findings since last tick. All changes committed
+    to chipoto69/dma-signal-intel with descriptive message. Live dashboard at
+    rapid-tundra-zffs.here.now reflects current state. If nothing new, clean exit
+    with "no delta" report.
+  context_sources:
+    - file: /root/vps-agents/dma-intel/index.html
+    - file: /root/vps-agents/dma-intel/data/trending-platforms.json
+    - file: /root/vps-agents/dma-intel/data/affiliate-programs.json
+    - kb: gbrain
+    - kb: wiki-kb
+    - kb: brain-kb
+    - kb: session_history
+    - cmd: "bash /root/vps-agents/dma-intel/scripts/probe-fleet.sh"
+  verification:
+    - id: sources-verified
+      type: programmatic
+      check: ["bash", "/root/vps-agents/dma-intel/scripts/verify-diff.sh"]
+      expect: exit_zero
+    - id: no-fabrication
+      type: judge
+      rubric: >
+        Every new finding has a verifiable source URL or KB reference.
+        No invented data. No hallucinated file paths, counts, or metrics.
+        All claims can be independently verified.
+    - id: dashboard-valid
+      type: programmatic
+      check: ["bash", "-c", "grep -q '</html>' /root/vps-agents/dma-intel/index.html"]
+      expect: exit_zero
+
+host:
+  agent: hermes
+  model: deepseek-v4-pro
+  provider: deepseek
+  toolsets: [web, terminal, file, session_search]
+
+council:
+  - id: reviewer-1
+    role: judge
+    agent: hermes
+    model: claude-sonnet-4
+    provider: anthropic
+    scope: [plan, delivery]
+    local: false
+
+gates:
+  plan_gate:
+    when: after_plan
+    members: [reviewer-1]
+    verdict_policy: revise_until_clean
+    verdict_source: reviewer-1
+    criteria: [sources-verified]
+    max_revisions: 2
+  delivery_gate:
+    when: after_each_delivery
+    members: [reviewer-1]
+    verdict_policy: revise_until_clean
+    verdict_source: reviewer-1
+    criteria: [no-fabrication, dashboard-valid]
+    max_revisions: 2
+
+loop_control:
+  max_iterations: 6
+  budget:
+    usd: 2.0
+    tokens: 500000
+    wall_clock_min: 15
+  no_progress:
+    max_stalled_iterations: 2
+    signals:
+      - no new findings since last tick
+      - all sources return same data
+      - no pattern matches triggered
+    action: stop
+  stop_conditions:
+    - all gates pass clean
+    - max_iterations reached
+    - no_progress detected (2 iterations)
+    - budget cap exceeded
+
+workspace:
+  dir: /root/vps-agents/dma-intel
+  isolation: current_workspace
+  layout:
+    - index.html
+    - "data/trending-platforms.json"
+    - "data/affiliate-programs.json"
+    - state.json
+    - run-log.md
+
+observability:
+  state_file: state.json
+  run_log: run-log.md
+  checkpoint_granularity: gate
+
+privacy:
+  egress:
+    - to: reviewer-1
+      sends: [plan, deliveries]
+      redact: [".env", ".env.*", "**/*.key", "**/credentials"]
+      consent: required
+
+schedule:
+  type: cron
+  cron: "0 */6 * * *"
+  deliver: local
+  skills: [dma-looper, loop-forge, github]
