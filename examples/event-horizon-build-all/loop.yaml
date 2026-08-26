@@ -1,0 +1,114 @@
+version: 1
+meta:
+  name: event-horizon-build-all-v0
+  description: Build Event Horizon through a review-gated Managed Email Portability vertical slice.
+  author: David Carlson / Network Iron
+  created: 2026-08-25
+  pattern: custom
+
+goal:
+  statement: >
+    Establish and execute the Event Horizon agentic build program. Deliver the first
+    verified vertical slice for Managed Email Portability while preserving the full
+    architecture across Network Iron, viIO, viEYE0, DNSCompass, Project Tumbleweed,
+    LSNs, Ethereal Nexus, and The Source Lab.
+  definition_of_done: >
+    An anonymized email workload can be represented by a provider-independent manifest,
+    evaluated against Canadian-first and non-US provider policy, audited for DNS and
+    authentication health, assigned evidence-backed trust and portability states,
+    given a migration and rollback plan, anchored to an LSN-compatible signed evidence
+    record, and packaged as a repeatable Network Iron managed service. All artifacts
+    are documented, tested, free of customer secrets and personal data, and submitted
+    through draft pull requests. Production changes remain human-gated.
+  context_sources:
+    - file: README.md
+    - file: team.yaml
+    - file: components.yaml
+    - file: STATE.md
+    - file: constraints.md
+  verification:
+    - id: architecture-coherence
+      type: judge
+      rubric: Every delivery advances the current vertical slice, preserves clean component boundaries, and avoids provider lock-in.
+    - id: security-and-privacy
+      type: judge
+      rubric: No credentials, customer identifiers, production data, unsafe defaults, or unreviewed production actions are present.
+    - id: semantic-sufficiency
+      type: judge
+      rubric: Each binary, ternary, categorical, or richer state model is the smallest model that preserves distinctions required for correct action.
+    - id: human-production-approval
+      type: human
+      prompt: David Carlson must explicitly approve any merge, deployment, production DNS change, customer migration, spending, public announcement, or external contact.
+
+host:
+  agent: hermes
+  model: configured-primary-engineering-model
+  provider: selected-by-operator
+  toolsets: [github, terminal, files, web, dns]
+
+council:
+  - id: architecture-reviewer
+    role: judge
+    agent: codex
+    model: configured-independent-architecture-reviewer
+    provider: openai
+    scope: [plan, delivery]
+  - id: adversarial-reviewer
+    role: judge
+    agent: claude-code
+    model: configured-independent-risk-reviewer
+    provider: anthropic
+    scope: [plan, delivery]
+
+gates:
+  plan_gate:
+    when: after_plan
+    members: [architecture-reviewer, adversarial-reviewer]
+    verdict_policy: revise_until_clean
+    verdict_source: architecture-reviewer
+    criteria: [architecture-coherence, security-and-privacy, semantic-sufficiency]
+    max_revisions: 3
+  delivery_gate:
+    when: after_each_delivery
+    members: [architecture-reviewer, adversarial-reviewer]
+    verdict_policy: human_override
+    verdict_source: adversarial-reviewer
+    criteria: [architecture-coherence, security-and-privacy, semantic-sufficiency, human-production-approval]
+    max_revisions: 3
+
+loop_control:
+  max_iterations: 8
+  budget:
+    usd: 25.0
+    tokens: 1500000
+    wall_clock_min: 240
+  no_progress:
+    max_stalled_iterations: 2
+    signals:
+      - repeated planning without a testable artifact
+      - work does not advance the current vertical slice
+      - verification fails without a new diagnosis
+      - complexity grows without measurable customer or operational value
+  stop_conditions:
+    - all v0.1 acceptance criteria pass
+    - human authority pauses or redirects the program
+    - production access would be required without approval
+    - secrets or customer data are detected
+    - budget or iteration cap is reached
+    - no progress is detected for two iterations
+
+workspace:
+  dir: examples/event-horizon-build-all
+  isolation: git_worktree
+  layout: [README.md, loop.yaml, team.yaml, components.yaml, STATE.md, constraints.md]
+
+observability:
+  state_file: state.json
+  run_log: run-log.md
+  checkpoint_granularity: gate
+  audit_score_badge: true
+
+schedule:
+  type: manual
+  deliver: draft_pull_request
+  skills: [loop-forge, github, security-review, open-source-release]

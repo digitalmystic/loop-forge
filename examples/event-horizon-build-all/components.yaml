@@ -1,0 +1,58 @@
+version: 1
+program: event-horizon-build-all
+vertical_slice: managed-email-portability-v0
+
+state_semantics:
+  trust_state: ['+', '0', '-']
+  health_state: ['+', '0', '-']
+  lifecycle: [backlog, ready, active, review, blocked, done, retired]
+
+components:
+  - id: network-iron-managed-email
+    layer: commercial-service
+    lifecycle: active
+    trust_state: '0'
+    health_state: '0'
+    v0_outcome: Productized assessment, migration, management, and portability service for the Friendly Geek pilot.
+  - id: viio
+    layer: operating-doctrine
+    lifecycle: active
+    trust_state: '0'
+    health_state: '+'
+    v0_outcome: Documented vendor-independent operating rules, authority levels, and customer-control commitments.
+  - id: vieye0
+    layer: evidence-and-observability
+    lifecycle: ready
+    trust_state: '0'
+    health_state: '0'
+    v0_outcome: Evidence-backed mail health, dependency, trust, and portability readiness model.
+  - id: dnscompass
+    layer: discovery-and-configuration
+    lifecycle: ready
+    trust_state: '0'
+    health_state: '0'
+    v0_outcome: Read-only mail DNS audit and transition-plan output.
+  - id: project-tumbleweed
+    layer: portability-and-migration
+    lifecycle: ready
+    trust_state: '0'
+    health_state: '0'
+    v0_outcome: Provider-independent email manifest, adapter contract, migration plan, delta sync, verification, and rollback.
+  - id: lsn-genesis
+    layer: customer-controlled-anchor
+    lifecycle: ready
+    trust_state: '0'
+    health_state: '0'
+    v0_outcome: Signed local evidence bundle and recovery manifest interface; no requirement to host production mail.
+  - id: ethereal-nexus
+    layer: distributed-trust-fabric
+    lifecycle: backlog
+    trust_state: '0'
+    health_state: '0'
+    v0_outcome: Minimal inter-node trust and provenance envelope for service evidence, without assuming membership equals trust.
+  - id: source-lab
+    layer: documentation-and-commons
+    lifecycle: active
+    trust_state: '0'
+    health_state: '+'
+    v0_outcome: Public architecture, runbooks, evidence, lessons, and reproducible reference implementation.
