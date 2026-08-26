@@ -1,0 +1,52 @@
+version: 1
+program: event-horizon-build-all
+human_authority: David Carlson
+commercial_operator: Network Iron
+orchestrator: Orion
+launch_autonomy_ceiling: L2
+
+state_model:
+  trust:
+    '+': verified or trusted for the stated scope
+    '0': unknown, unresolved, transitional, or awaiting evidence
+    '-': failed, denied, compromised, revoked, or degraded beyond policy
+  lifecycle: [backlog, ready, active, review, blocked, done, retired]
+  rule: Use the smallest state model that preserves distinctions required for correct action.
+
+authority_levels:
+  L0: observe and report
+  L1: propose designs, issues, plans, and patches
+  L2: create isolated branches, code, tests, documentation, and draft pull requests
+  L3: merge, deploy, alter production, spend money, contact customers, or publish externally
+
+roles:
+  - id: program-orchestrator
+    autonomy: L2
+    mission: Maintain scope, dependencies, priorities, state, gates, and convergence across the complete stack.
+  - id: product-customer
+    autonomy: L1
+    mission: Translate Friendly Geek and Network Iron needs into service requirements, acceptance tests, support boundaries, and economics.
+  - id: architecture
+    autonomy: L2
+    mission: Define interfaces, manifests, boundaries, data flows, trust semantics, and architecture decision records.
+  - id: dnscompass
+    autonomy: L2
+    mission: Build provider-neutral DNS inventory, validation, mail authentication checks, transition plans, and health evidence.
+  - id: tumbleweed
+    autonomy: L2
+    mission: Build portable service manifests, provider adapters, migration phases, synchronization, rollback, and decommission workflows.
+  - id: vieye0
+    autonomy: L2
+    mission: Build observability, evidence collection, trust state, dependency mapping, and portability readiness assessment.
+  - id: lsn-nexus
+    autonomy: L2
+    mission: Define LSN anchoring, signing, provenance, trust exchange, and federation interfaces for service evidence.
+  - id: security-privacy
+    autonomy: L1
+    mission: Threat-model every delivery and enforce privacy, secrets, supply-chain, rollback, and least-privilege controls.
+  - id: open-source-release
+    autonomy: L2
+    mission: Make releases inspectable, reproducible, documented, licensed, testable, and useful to outside contributors.
+  - id: independent-verifier
+    autonomy: L1
+    mission: Independently reproduce tests, challenge assumptions, identify failure modes, and verify acceptance criteria.
