@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ethereal-nexus.local/schemas/repository-registry.v1.schema.json",
+  "title": "Ethereal Nexus Repository Registry v1",
+  "type": "object",
+  "required": ["version", "project", "registry_type", "classes", "repositories"],
+  "properties": {
+    "version": { "const": 1 },
+    "project": { "type": "string", "minLength": 1 },
+    "registry_type": { "const": "repository-landscape" },
+    "classes": {
+      "type": "object",
+      "required": ["A", "B", "C", "D"],
+      "properties": {
+        "A": { "type": "string" },
+        "B": { "type": "string" },
+        "C": { "type": "string" },
+        "D": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "repositories": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "repo", "domain", "class", "status", "role", "forbidden_role", "trust"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+          "repo": { "type": "string", "pattern": "^[^/]+/[^/]+$" },
+          "upstream": { "type": "string", "pattern": "^[^/]+/[^/]+$" },
+          "domain": { "type": "string", "minLength": 1 },
+          "class": { "enum": ["A", "B", "C", "D"] },
+          "candidate_class": { "enum": ["A", "B", "C", "D"] },
+          "status": { "enum": ["ELIGIBLE", "CONDITIONAL", "RESEARCH_ONLY", "INELIGIBLE", "UNREVIEWED"] },
+          "role": { "type": "string", "minLength": 1 },
+          "forbidden_role": { "type": "string", "minLength": 1 },
+          "trust": { "type": "string", "minLength": 1 },
+          "local_first": { "type": "boolean" },
+          "reviewed_commit": { "type": ["string", "null"] },
+          "license": { "type": ["string", "null"] },
+          "notes": { "type": ["string", "null"] }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}
