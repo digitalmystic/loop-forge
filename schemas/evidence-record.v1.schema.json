@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ethereal-nexus.local/schemas/evidence-record.v1.schema.json",
+  "title": "Ethereal Nexus Evidence Record v1",
+  "type": "object",
+  "required": ["version","evidence_id","node_id","subject","claim","result","collected_at","collector","artifacts"],
+  "properties": {
+    "version": { "const": 1 },
+    "evidence_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
+    "node_id": { "type": "string", "minLength": 1 },
+    "subject": { "type": "string", "minLength": 1 },
+    "claim": { "type": "string", "minLength": 1 },
+    "result": { "enum": ["VERIFIED","NOT_VERIFIED","INDETERMINATE"] },
+    "collected_at": { "type": "string", "format": "date-time" },
+    "collector": {
+      "type": "object",
+      "required": ["type","id"],
+      "properties": {
+        "type": { "enum": ["human","tool","agent","council","ci"] },
+        "id": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": true
+    },
+    "method": { "type": ["string","null"] },
+    "repository_id": { "type": ["string","null"] },
+    "repository_commit": { "type": ["string","null"] },
+    "tool_version": { "type": ["string","null"] },
+    "command": { "type": ["string","null"] },
+    "artifacts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["type","location"],
+        "properties": {
+          "type": { "enum": ["log","report","hash","config","screenshot","test-output","attestation","other"] },
+          "location": { "type": "string", "minLength": 1 },
+          "sha256": { "type": ["string","null"], "pattern": "^[A-Fa-f0-9]{64}$" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "review": {
+      "type": "object",
+      "properties": {
+        "required": { "type": "boolean" },
+        "reviewer": { "type": ["string","null"] },
+        "reviewed_at": { "type": ["string","null"], "format": "date-time" },
+        "decision": { "enum": ["ACCEPTED","REJECTED","PENDING"] }
+      },
+      "additionalProperties": true
+    },
+    "notes": { "type": ["string","null"] }
+  },
+  "additionalProperties": true
+}
