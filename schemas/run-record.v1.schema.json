@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ethereal-nexus.local/schemas/run-record.v1.schema.json",
+  "title": "Ethereal Nexus Run Record v1",
+  "type": "object",
+  "required": ["version","run_id","node_id","started_at","actor","capability_id","status","inputs","outputs"],
+  "properties": {
+    "version": { "const": 1 },
+    "run_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
+    "node_id": { "type": "string", "minLength": 1 },
+    "started_at": { "type": "string", "format": "date-time" },
+    "ended_at": { "type": ["string","null"], "format": "date-time" },
+    "actor": {
+      "type": "object",
+      "required": ["type","id"],
+      "properties": {
+        "type": { "enum": ["human","agent","service","council","ci"] },
+        "id": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": true
+    },
+    "capability_id": { "type": "string", "minLength": 1 },
+    "lease_ref": { "type": ["string","null"] },
+    "status": { "enum": ["STARTED","SUCCEEDED","FAILED","ABORTED","DENIED"] },
+    "inputs": { "type": "array", "items": { "type": "string" } },
+    "outputs": { "type": "array", "items": { "type": "string" } },
+    "evidence": { "type": "array", "items": { "type": "string" } },
+    "command": { "type": ["string","null"] },
+    "exit_code": { "type": ["integer","null"] },
+    "notes": { "type": ["string","null"] }
+  },
+  "additionalProperties": true
+}
