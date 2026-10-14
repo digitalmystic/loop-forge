@@ -1,0 +1,41 @@
+version: 1
+node_id: node-example-01
+role: development-and-verification
+status: EVALUATING
+
+platform:
+  os: Debian
+  os_version: "13"
+  architecture: x86_64
+  hardware: replace-with-node-hardware-description
+
+capabilities:
+  - id: local-inference
+    status: EVALUATING
+    authority: local-human-approved
+    scope: local-node-only
+    repository_id: llama-cpp
+
+  - id: static-code-analysis
+    status: EVALUATING
+    authority: scoped-capability-lease
+    scope: checked-out-projects-only
+    repository_id: semgrep
+
+  - id: vulnerability-testing
+    status: DISABLED
+    authority: explicit-human-approval-required
+    scope: authorized-targets-only
+    repository_id: nuclei
+
+models: []
+services: []
+
+network:
+  inbound: []
+  outbound_policy: documented-per-service
+
+provenance:
+  registry: registry/repositories.yaml
+  manifest_schema: schemas/node-manifest.v1.schema.json
+  notes: Example only; not a declaration of deployed capability.
