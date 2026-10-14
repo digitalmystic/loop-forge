@@ -30,7 +30,15 @@
           "status": { "enum": ["IMPLEMENTED", "APPROVED", "EVALUATING", "RESEARCH", "ASPIRATIONAL", "DISABLED"] },
           "authority": { "type": "string" },
           "scope": { "type": ["string", "null"] },
-          "repository_id": { "type": ["string", "null"] }
+          "repository_id": { "type": ["string", "null"] },
+          "evidence": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "leases": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 }
+          }
         },
         "additionalProperties": true
       }
