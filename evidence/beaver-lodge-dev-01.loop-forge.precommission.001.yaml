@@ -1,0 +1,26 @@
+version: 1
+evidence_id: beaver-lodge-dev-01.loop-forge.precommission.001
+node_id: beaver-lodge-dev-01
+subject: capability:nexus-loop-control
+claim: "Loop Forge is present in the reviewed repository branch and its registry entry is valid."
+result: VERIFIED
+collected_at: "2026-10-14T01:30:00Z"
+collector:
+  type: human
+  id: digitalmystic
+method: repository-review
+repository_id: loop-forge
+repository_commit: null
+tool_version: null
+command: null
+artifacts:
+  - type: report
+    location: docs/REPOSITORY-LANDSCAPE.md
+  - type: config
+    location: registry/repositories.yaml
+review:
+  required: true
+  reviewer: digitalmystic
+  reviewed_at: null
+  decision: PENDING
+notes: "Pre-commissioning evidence only. This does not prove the local node is installed or operational."

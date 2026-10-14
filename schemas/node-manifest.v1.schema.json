@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ethereal-nexus.local/schemas/node-manifest.v1.schema.json",
+  "title": "Ethereal Nexus Node Manifest v1",
+  "type": "object",
+  "required": ["version", "node_id", "role", "status", "platform", "capabilities"],
+  "properties": {
+    "version": { "const": 1 },
+    "node_id": { "type": "string", "minLength": 1 },
+    "role": { "type": "string", "minLength": 1 },
+    "status": { "enum": ["IMPLEMENTED", "APPROVED", "EVALUATING", "RESEARCH", "ASPIRATIONAL"] },
+    "platform": {
+      "type": "object",
+      "required": ["os", "architecture"],
+      "properties": {
+        "os": { "type": "string" },
+        "os_version": { "type": ["string", "null"] },
+        "architecture": { "type": "string" },
+        "hardware": { "type": ["string", "null"] }
+      },
+      "additionalProperties": true
+    },
+    "capabilities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "status", "authority"],
+        "properties": {
+          "id": { "type": "string" },
+          "status": { "enum": ["IMPLEMENTED", "APPROVED", "EVALUATING", "RESEARCH", "ASPIRATIONAL", "DISABLED"] },
+          "authority": { "type": "string" },
+          "scope": { "type": ["string", "null"] },
+          "repository_id": { "type": ["string", "null"] },
+          "evidence": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "leases": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 }
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "models": { "type": "array" },
+    "services": { "type": "array" },
+    "network": { "type": "object" },
+    "provenance": { "type": "object" }
+  },
+  "additionalProperties": true
+}

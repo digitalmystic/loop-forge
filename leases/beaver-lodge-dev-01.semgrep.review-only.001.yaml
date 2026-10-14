@@ -1,0 +1,39 @@
+version: 1
+lease_id: beaver-lodge-dev-01.semgrep.review-only.001
+node_id: beaver-lodge-dev-01
+capability_id: static-code-analysis
+repository_id: semgrep
+actor:
+  type: agent
+  id: nexus-review-agent
+authority: scoped-capability-lease
+purpose: "Read-only static analysis of explicitly checked-out development repositories."
+scope:
+  targets:
+    - local-development-workspaces
+  actions:
+    - read-source
+    - analyze-source
+    - write-report
+  network: []
+  filesystem:
+    - "/workspace:ro"
+    - "/evidence:rw"
+issued_at: "2026-10-14T01:30:00Z"
+expires_at: "2026-10-15T01:30:00Z"
+status: PROPOSED
+human_approval:
+  required: true
+  approved_by: null
+  approved_at: null
+evidence_requirements:
+  - raw-tool-output
+  - tool-version
+  - repository-commit
+  - final-review-decision
+stop_conditions:
+  - scope-mismatch
+  - unexpected-network-access
+  - write-attempt-outside-evidence-directory
+  - authority-uncertain
+notes: "Example only; not an active authorization."

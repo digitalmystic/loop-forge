@@ -1,0 +1,18 @@
+version: 1
+run_id: beaver-lodge-dev-01.20261014T020000Z.semgrep.0001
+node_id: beaver-lodge-dev-01
+started_at: "2026-10-14T02:00:00Z"
+ended_at: null
+actor:
+  type: agent
+  id: nexus-review-agent
+capability_id: static-code-analysis
+lease_ref: leases/beaver-lodge-dev-01.semgrep.review-only.001.yaml
+status: DENIED
+inputs:
+  - local-development-workspaces
+outputs: []
+evidence: []
+command: null
+exit_code: null
+notes: "Example run showing fail-closed behaviour because the referenced capability lease is PROPOSED, not ACTIVE."

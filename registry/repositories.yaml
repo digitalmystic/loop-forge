@@ -1,0 +1,248 @@
+version: 1
+project: ethereal-nexus
+registry_type: repository-landscape
+decision_model:
+  eligible: approved_for_defined_role
+  conditional: review_requirements_remain
+  research_only: study_only_not_trusted_execution
+  ineligible: rejected_for_proposed_role
+  unreviewed: catalogued_not_assessed
+
+classes:
+  A: nexus_core
+  B: nexus_infrastructure
+  C: nexus_capability
+  D: research_reference
+
+repositories:
+  - id: loop-forge
+    repo: digitalmystic/loop-forge
+    domain: agent-control-plane
+    class: A
+    status: ELIGIBLE
+    role: review-gated agent orchestration and Nexus integration workspace
+    forbidden_role: none
+    trust: high
+    local_first: true
+
+  - id: pentestgpt
+    repo: GreyDGL/PentestGPT
+    domain: security-reasoning
+    class: D
+    candidate_class: C
+    status: CONDITIONAL
+    role: comparative architecture and bounded security reasoning
+    forbidden_role: unrestricted autonomous execution
+    trust: pending-review
+    local_first: preferred
+
+  - id: strix
+    repo: usestrix/strix
+    domain: security-reasoning
+    class: D
+    candidate_class: C
+    status: CONDITIONAL
+    role: comparative agentic application security
+    forbidden_role: authority-layer
+    trust: pending-review
+
+  - id: hexstrike-ai
+    repo: 0x4m4/hexstrike-ai
+    domain: security-reasoning
+    class: D
+    status: RESEARCH_ONLY
+    role: quarantined MCP and security-agent architecture study
+    forbidden_role: trusted-control-plane
+    trust: quarantined
+
+  - id: semgrep
+    repo: semgrep/semgrep
+    domain: deterministic-security
+    class: C
+    status: CONDITIONAL
+    role: static code analysis capability
+    forbidden_role: authority-layer
+    trust: pending-review
+
+  - id: nuclei
+    repo: projectdiscovery/nuclei
+    domain: deterministic-security
+    class: C
+    status: CONDITIONAL
+    role: scoped template-driven vulnerability testing
+    forbidden_role: unrestricted-targeting
+    trust: pending-review
+
+  - id: wazuh
+    repo: wazuh/wazuh
+    domain: security-telemetry
+    class: B
+    candidate_class: C
+    status: CONDITIONAL
+    role: telemetry detection and security monitoring
+    forbidden_role: nexus-authority
+    trust: pending-review
+
+  - id: prowler
+    repo: prowler-cloud/prowler
+    domain: cloud-security
+    class: C
+    status: CONDITIONAL
+    role: cloud posture and compliance assessment
+    forbidden_role: unrestricted-remediation
+    trust: pending-review
+
+  - id: amass
+    repo: owasp-amass/amass
+    domain: attack-surface
+    class: C
+    status: CONDITIONAL
+    role: scoped asset and attack-surface discovery
+    forbidden_role: unrestricted-recon
+    trust: pending-review
+
+  - id: gitleaks
+    repo: gitleaks/gitleaks
+    domain: supply-chain-security
+    class: C
+    status: CONDITIONAL
+    role: secret detection
+    forbidden_role: none
+    trust: pending-review
+
+  - id: caido
+    repo: caido/caido
+    domain: human-security-workbench
+    class: C
+    candidate_class: D
+    status: CONDITIONAL
+    role: analyst workbench integration
+    forbidden_role: nexus-core
+    trust: pending-review
+
+  - id: kyojin
+    repo: Yamz-Labs/kyojin
+    domain: sovereign-inference
+    class: B
+    status: CONDITIONAL
+    role: AMD ROCm local inference backend
+    forbidden_role: nexus-core
+    trust: pending-review
+    local_first: true
+
+  - id: llama-cpp
+    repo: ggml-org/llama.cpp
+    domain: sovereign-inference
+    class: B
+    status: CONDITIONAL
+    role: portable local inference backend
+    forbidden_role: nexus-core
+    trust: pending-review
+    local_first: true
+
+  - id: ollama
+    repo: ollama/ollama
+    domain: sovereign-inference
+    class: B
+    status: CONDITIONAL
+    role: local model serving layer
+    forbidden_role: nexus-core
+    trust: pending-review
+    local_first: true
+
+  - id: openwhispr
+    repo: OpenWhispr/openwhispr
+    domain: voice-interface
+    class: B
+    candidate_class: C
+    status: CONDITIONAL
+    role: local voice interface
+    forbidden_role: authority-layer
+    trust: pending-review
+    local_first: true
+
+  - id: openwhispr-mcp
+    repo: OpenWhispr/openwhispr-mcp
+    domain: capability-transport
+    class: C
+    status: CONDITIONAL
+    role: voice-to-tool bridge
+    forbidden_role: authority-layer
+    trust: pending-review
+
+  - id: whisper-cpp
+    repo: ggerganov/whisper.cpp
+    domain: speech-recognition
+    class: B
+    candidate_class: C
+    status: CONDITIONAL
+    role: local speech recognition primitive
+    forbidden_role: nexus-core
+    trust: pending-review
+    local_first: true
+
+  - id: open-connector
+    repo: digitalmystic/open-connector
+    upstream: oomol-lab/open-connector
+    domain: integration
+    class: B
+    candidate_class: C
+    status: CONDITIONAL
+    role: controlled external-service integration gateway
+    forbidden_role: unrestricted-credential-broker
+    trust: pending-review
+
+  - id: hub-mcp
+    repo: digitalmystic/hub-mcp
+    upstream: docker/hub-mcp
+    domain: capability-transport
+    class: C
+    status: CONDITIONAL
+    role: Docker capability bridge
+    forbidden_role: authority-layer
+    trust: pending-review
+
+  - id: hindsight
+    repo: digitalmystic/hindsight
+    upstream: vectorize-io/hindsight
+    domain: agent-memory
+    class: B
+    candidate_class: C
+    status: CONDITIONAL
+    role: persistent agent memory research
+    forbidden_role: sole-source-of-truth
+    trust: pending-review
+
+  - id: meetily
+    repo: digitalmystic/meetily
+    upstream: Zackriya-Solutions/meetily
+    domain: local-intelligence
+    class: B
+    candidate_class: C
+    status: CONDITIONAL
+    role: local meeting transcription and summarization
+    forbidden_role: authoritative-record-without-verification
+    trust: pending-review
+    local_first: true
+
+  - id: project-nomad
+    repo: digitalmystic/project-nomad
+    upstream: Crosstalk-Solutions/project-nomad
+    domain: resilience
+    class: D
+    candidate_class: B
+    status: CONDITIONAL
+    role: offline resilient node research
+    forbidden_role: nexus-core
+    trust: pending-review
+
+  - id: portmaster
+    repo: digitalmystic/portmaster
+    upstream: safing/portmaster
+    domain: network-sovereignty
+    class: B
+    candidate_class: C
+    status: CONDITIONAL
+    role: host network policy and privacy
+    forbidden_role: nexus-policy-source
+    trust: pending-review
