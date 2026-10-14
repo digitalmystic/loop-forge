@@ -15,36 +15,50 @@ capabilities:
     authority: local-human-approved
     scope: local-development-workspaces
     repository_id: loop-forge
+    evidence:
+      - evidence/beaver-lodge-dev-01.loop-forge.precommission.001.yaml
+    leases: []
 
   - id: local-inference
     status: ASPIRATIONAL
     authority: local-human-approved
     scope: local-node-only
     repository_id: llama-cpp
+    evidence: []
+    leases: []
 
   - id: static-code-analysis
     status: ASPIRATIONAL
     authority: scoped-capability-lease
     scope: checked-out-projects-only
     repository_id: semgrep
+    evidence: []
+    leases:
+      - leases/beaver-lodge-dev-01.semgrep.review-only.001.yaml
 
   - id: secret-detection
     status: ASPIRATIONAL
     authority: scoped-capability-lease
     scope: checked-out-projects-only
     repository_id: gitleaks
+    evidence: []
+    leases: []
 
   - id: vulnerability-testing
     status: DISABLED
     authority: explicit-human-approval-required
     scope: authorized-targets-only
     repository_id: nuclei
+    evidence: []
+    leases: []
 
   - id: security-telemetry
     status: ASPIRATIONAL
     authority: local-node-policy
     scope: this-node-and-approved-agents
     repository_id: wazuh
+    evidence: []
+    leases: []
 
 models: []
 
@@ -63,5 +77,7 @@ network:
 provenance:
   registry: registry/repositories.yaml
   manifest_schema: schemas/node-manifest.v1.schema.json
+  evidence_schema: schemas/evidence-record.v1.schema.json
+  lease_schema: schemas/capability-lease.v1.schema.json
   commissioning_state: not-yet-commissioned
-  notes: "This manifest is a pre-commissioning skeleton. All ASPIRATIONAL entries must be promoted only after installation, validation, and review."
+  notes: "This manifest is a pre-commissioning skeleton. All ASPIRATIONAL entries must be promoted only after installation, validation, evidence capture, and review."
